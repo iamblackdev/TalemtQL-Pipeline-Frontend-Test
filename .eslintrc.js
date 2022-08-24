@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   rules: {
     "node/no-unsupported-features/es-syntax": [
       "error",
