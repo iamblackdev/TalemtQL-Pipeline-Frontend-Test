@@ -17,7 +17,6 @@ const startApp = async () => {
 
 nextBtn?.addEventListener("click", () => {
   currentPage = currentPage + 1;
-  // loadData();
   if (tableData[currentPage]) {
     displayData(tableData[currentPage]);
   } else {
@@ -27,7 +26,6 @@ nextBtn?.addEventListener("click", () => {
 });
 prevBtn?.addEventListener("click", () => {
   currentPage = currentPage - 1;
-  // loadData();
   checkPrevBtnState();
   if (tableData[currentPage]) {
     displayData(tableData[currentPage]);
