@@ -1,33 +1,35 @@
 import { singlePageDataType } from "./types";
 import getData from "./getData";
 
-let currentPage = 1;
+let currentPage: number = 1;
+
 let tableData: { [key: number]: singlePageDataType[] } = {};
-const tbody = document.querySelector("tbody");
 
-const prevBtn = document.querySelector("[data-prevbtn]");
-const nextBtn = document.querySelector("[data-nextbtn]");
-const pageview = document.querySelector("[data-pageview]");
+// getting elements from the dom
+const tbody: HTMLTableSectionElement | null = document.querySelector("tbody");
+const prevBtn: Element | null = document.querySelector("[data-prevbtn]");
+const nextBtn: Element | null = document.querySelector("[data-nextbtn]");
+const pageview: Element | null = document.querySelector("[data-pageview]");
+const notifier: Element | null = document.querySelector("[data-notifier]");
 
-const startApp = async () => {
-  loadData();
-  previewLabel();
-  checkPrevBtnState();
-};
-
+// click event listener for next btn
 nextBtn?.addEventListener("click", () => {
   currentPage = currentPage + 1;
   if (tableData[currentPage]) {
+    notifier!.innerHTML = "";
     displayData(tableData[currentPage]);
   } else {
     loadData();
   }
   checkPrevBtnState();
 });
+
+// click event listener for previous btn
 prevBtn?.addEventListener("click", () => {
   currentPage = currentPage - 1;
   checkPrevBtnState();
   if (tableData[currentPage]) {
+    notifier!.innerHTML = "";
     displayData(tableData[currentPage]);
   } else {
     loadData();
@@ -35,6 +37,7 @@ prevBtn?.addEventListener("click", () => {
   checkPrevBtnState();
 });
 
+// disable and enabling fot previous btn
 const checkPrevBtnState = () => {
   if (currentPage <= 1) {
     prevBtn?.setAttribute("disabled", "true");
@@ -43,18 +46,28 @@ const checkPrevBtnState = () => {
   }
 };
 
+// getting the needed new data from the backend
 const loadData = () => {
+  notifier!.innerHTML = "<label>Loading...</label>";
   getData(currentPage)
     .then((data) => {
       tableData = { ...tableData, ...data.results[0] };
       displayData(tableData[currentPage]);
+      notifier!.innerHTML = "";
     })
-    .catch((err) => console.error(err));
+    .catch((err) => {
+      currentPage = currentPage - 1;
+      notifier!.innerHTML = "<label class='error'>Error loading data</label>";
+      console.error(err);
+    });
 };
 
+// updating label showing current page
 const previewLabel = () => {
   pageview!.innerHTML = `Showing Page ${currentPage}`;
 };
+
+// displaying the needed data for the table
 const displayData = (datas: singlePageDataType[]) => {
   tbody!.innerHTML = "";
   datas.forEach((data) => {
@@ -67,6 +80,10 @@ const displayData = (datas: singlePageDataType[]) => {
   `;
   });
   previewLabel();
+};
+
+const startApp = async () => {
+  loadData();
 };
 
 document.addEventListener("DOMContentLoaded", startApp);
