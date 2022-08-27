@@ -5,9 +5,7 @@ The project fetches (randomised) data from the server and display in on the tabl
 ## Process stpes
 
 1. An event listener (DOMContentLoaded) is added to the documnet object that listens for when the dom contetnt is loaded.
-
 2. After the dom is loaded a function "startApp" is called wihich also calls the "loadData" function.
-
 3. The loadData function uses javascript native fetch API to fetch the data of the current page which is set to one (1) by default. When you fetch page N, you get data for page N and N+1 (i.e the API always returns 2 pages by default), which contains five records each. All data are stored in variable "tableData" which is an empty object by default and contains all the pages with there records that have been fetched.
 
 4. The "displayData" function is then called, it receive an argument of a page data with an array of it records which it map through and display the in the table in differrnt rows with unique "data-entryid" of each record "id".
