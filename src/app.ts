@@ -46,21 +46,6 @@ const checkPrevBtnState = () => {
   }
 };
 
-// getting the needed new data from the backend
-const loadData = () => {
-  notifier!.innerHTML = "<label>Loading...</label>";
-  getData(currentPage)
-    .then((data) => {
-      tableData = { ...tableData, ...data.results[0] };
-      displayData(tableData[currentPage]);
-      notifier!.innerHTML = "";
-    })
-    .catch((err) => {
-      currentPage = currentPage - 1;
-      notifier!.innerHTML = "<label class='error'>Error loading data</label>";
-      console.error(err);
-    });
-};
 
 // updating label showing current page
 const previewLabel = () => {
@@ -80,6 +65,22 @@ const displayData = (datas: singlePageDataType[]) => {
   `;
   });
   previewLabel();
+};
+
+// getting the needed new data from the backend
+const loadData = () => {
+  notifier!.innerHTML = "<label>Loading...</label>";
+  getData(currentPage)
+    .then((data) => {
+      tableData = { ...tableData, ...data.results[0] };
+      displayData(tableData[currentPage]);
+      notifier!.innerHTML = "";
+    })
+    .catch((err) => {
+      currentPage = currentPage - 1;
+      notifier!.innerHTML = "<label class='error'>Error loading data</label>";
+      console.error(err);
+    });
 };
 
 const startApp = async () => {
